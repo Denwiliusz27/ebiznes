@@ -23,3 +23,10 @@ GET     /categories/get/:categoryId    controllers.CategoryController.getCategor
 POST    /categories/create             controllers.CategoryController.addNewCategory()
 PUT     /categories/update/:categoryId controllers.CategoryController.updateCategory(categoryId: Int)
 DELETE  /categories/delete/:categoryId controllers.CategoryController.deleteCategory(categoryId: Int)
+
+# SHOPPINGCART
+GET     /basket                        controllers.ShoppingBasketController.getAll()
+GET     /basket/get/:productId         controllers.ShoppingBasketController.getShoppingProduct(productId: Int)
+POST    /basket/create                 controllers.ShoppingBasketController.addNewShoppingProduct()
+PUT     /basket/update/:productId      controllers.ShoppingBasketController.updateShoppingProduct(productId: Int)
+DELETE  /basket/delete/:productId      controllers.ShoppingBasketController.deleteShoppingProduct(productId: Int)
