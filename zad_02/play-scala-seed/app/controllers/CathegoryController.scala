@@ -7,43 +7,44 @@ import play.api.libs.json._
 import scala.collection.mutable
 
 @Singleton
-class ProductController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
+class CathegoryController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  private val products = mutable.Set[Product]()
-  products += Product(1, "Dziady", "Adam Mickiewicz", 39, 20, "Book for school")
-  products += Product(2, "Lalka", "Boleslaw Prus", 35, 15, "Book about love")
-  products += Product(3, "Sherlock Holmes", "Artur Doyle", 28, 10, "Criminal book")
-  products += Product(4, "Balladyna", "Juliusz Słowacki", 37, 22, "Romantic drama")
+  private val cathegories = mutable.Set[Cathegory]()
+  cathegories += Cathegory(1, "Music")
+  cathegories += Cathegory(2, "Biography")
+  cathegories += Cathegory(3, "Kids")
+  cathegories += Cathegory(4, "History")
+  cathegories += Cathegory(5, "Horror")
 
-  implicit val productsJson = Json.format[Product]
-  implicit val productReqJson = Json.format[ProductRequest]
+  implicit val cathegoryJson = Json.format[Cathegory]
+  implicit val cathegoryReqJson = Json.format[CathegoryRequest]
 
   // GET All
   def getAll(): Action[AnyContent] = Action {
-    if (products.isEmpty){
+    if (cathegories.isEmpty){
       NoContent
     } else {
-      Ok(Json.toJson(products))
+      Ok(Json.toJson(cathegories))
     }
   }
 
   // GET with ID
-  def getProduct(productId: Int) = Action {
-    var product = products.find(_.id == productId);
+  def getCathegory(cathegoryId: Int) = Action {
+    var cathegory = cathegories.find(_.id == cathegoryId);
 
-    product match {
+    cathegory match {
       case None => NotFound
-      case Some(newProduct) => Ok (Json.toJson(newProduct) )
+      case Some(newCathegory) => Ok (Json.toJson(newCathegory) )
     }
   }
 
-  // POST new product
-  def addNewProduct(): Action[AnyContent] = Action { implicit request =>
+  // POST new cathegory
+  def addNewCathegory(): Action[AnyContent] = Action { implicit request =>
     var data = request.body
     var jsonObj = data.asJson
-    var product: Option[ProductRequest] =
+    var cathegory: Option[CathegoryRequest] =
       jsonObj.flatMap(
-        Json.fromJson[ProductRequest](_).asOpt
+        Json.fromJson[CathegoryRequest](_).asOpt
       )
 
     product match {
@@ -77,6 +78,7 @@ class ProductController @Inject()(val controllerComponents: ControllerComponents
             var newP = Product(productId, reqData.name, reqData.author, reqData.price, reqData.amount, reqData.description)
             products.update(newP, true)
             Created(Json.toJson(newP))
+
           case None => BadRequest
         }
       case None => BadRequest
