@@ -9,7 +9,7 @@ import scala.collection.mutable
 @Singleton
 class ProductController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {
 
-  private val products = new mutable.ListBuffer[Product]()
+  private val products = mutable.Set[Product]()
   products += Product(1, "Dziady", "Adam Mickiewicz", 39, 20, "Book for school")
   products += Product(2, "Lalka", "Boleslaw Prus", 35, 15, "Book about love")
   products += Product(3, "Sherlock Holmes", "Artur Doyle", 28, 10, "Criminal book")
@@ -33,7 +33,7 @@ class ProductController @Inject()(val controllerComponents: ControllerComponents
 
     product match {
       case None => NotFound
-      case Some(item) => Ok (Json.toJson (item) )
+      case Some(newProduct) => Ok (Json.toJson(newProduct) )
     }
   }
 
@@ -47,11 +47,16 @@ class ProductController @Inject()(val controllerComponents: ControllerComponents
       )
 
     product match {
-      case Some(item) =>
-        var newId = products.map(_.id).max + 1
-        var newProduct = Product(newId, item.name, item.author, item.price, item.amount, item.description)
-        products += newProduct
-        Created(Json.toJson(newProduct))
+      case Some(reqData) =>
+//        var newId = products.maxBy(_.id) + 1
+        var newId = products.maxByOption(_.id).map(_.id)
+        newId match {
+          case Some(maxId) =>
+            var newProduct = Product(maxId+1, reqData.name, reqData.author, reqData.price, reqData.amount, reqData.description)
+            products.update(newProduct, true)
+            Created(Json.toJson(newProduct))
+          case None => BadRequest
+        }
       case None => BadRequest
     }
   }
@@ -65,13 +70,13 @@ class ProductController @Inject()(val controllerComponents: ControllerComponents
       )
 
     product match {
-      case Some(item) =>
+      case Some(reqData) =>
         var tmpProduct = products.find(_.id == productId)
         tmpProduct match {
           case Some(tmpItem) =>
-            products -= tmpItem
-            var newP = Product(productId, item.name, item.author, item.price, item.amount, item.description)
-            products += newP
+            products.update(tmpItem, false)
+            var newP = Product(productId, reqData.name, reqData.author, reqData.price, reqData.amount, reqData.description)
+            products.update(newP, true)
             Created(Json.toJson(newP))
 
           case None => BadRequest
@@ -84,9 +89,8 @@ class ProductController @Inject()(val controllerComponents: ControllerComponents
     var product = products.find(_.id == productId)
     product match{
       case Some(item) =>
-        products -= item
+        products.update(item, false)
         Created(Json.toJson(item))
     }
   }
-
 }
