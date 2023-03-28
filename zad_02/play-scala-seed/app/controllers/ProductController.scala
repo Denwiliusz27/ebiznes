@@ -89,6 +89,7 @@ class ProductController @Inject()(val controllerComponents: ControllerComponents
       case Some(item) =>
         products.update(item, false)
         Created(Json.toJson(item))
+      case None => BadRequest
     }
   }
 }
