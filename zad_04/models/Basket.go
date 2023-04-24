@@ -4,6 +4,6 @@ import "gorm.io/gorm"
 
 type Basket struct {
 	gorm.Model
-	ProductName string
-	Amount      int
+	Name   string `json:"name"`
+	Amount int    `json:"amount"`
 }
