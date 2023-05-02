@@ -1,0 +1,39 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# https://www.playframework.com/documentation/latest/ScalaRouting
+# ~~~~
+
+# An example controller showing a sample home page
+GET     /                              controllers.HomeController.index()
+
+# Map static resources from the /public folder to the /assets URL path
+GET     /assets/*file                  controllers.Assets.versioned(path="/public", file: Asset)
+
+
+# PRODUCT
+GET     /products                      controllers.ProductController.getAll()
+GET     /products/get/:productId       controllers.ProductController.getProduct(productId: Int)
+POST    /products/create               controllers.ProductController.addNewProduct()
+PUT     /products/update/:productId    controllers.ProductController.updateProduct(productId: Int)
+DELETE  /products/delete/:productId    controllers.ProductController.deleteProduct(productId: Int)
+
+#PAYMENTS
+GET     /payments                      controllers.PaymentController.getAll()
+POST    /payments/create               controllers.PaymentController.addNewPayment()
+
+
+# CATHEGORY
+GET     /categories                    controllers.CategoryController.getAll()
+GET     /categories/get/:categoryId    controllers.CategoryController.getCategory(categoryId: Int)
+POST    /categories/create             controllers.CategoryController.addNewCategory()
+PUT     /categories/update/:categoryId controllers.CategoryController.updateCategory(categoryId: Int)
+DELETE  /categories/delete/:categoryId controllers.CategoryController.deleteCategory(categoryId: Int)
+
+# SHOPPINGCART
+GET     /basket                        controllers.ShoppingBasketController.getAll()
+GET     /basket/get/:productId         controllers.ShoppingBasketController.getShoppingProduct(productId: Int)
+POST    /basket/create                 controllers.ShoppingBasketController.addNewShoppingProduct()
+PUT     /basket/update/:productId      controllers.ShoppingBasketController.updateShoppingProduct(productId: Int)
+DELETE  /basket/delete/:productId      controllers.ShoppingBasketController.deleteShoppingProduct(productId: Int)
+
+
