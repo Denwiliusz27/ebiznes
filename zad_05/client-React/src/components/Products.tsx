@@ -18,7 +18,7 @@ function Products(){
             ) : (
                 <ul className="p-6 divide-y divide-slate-200">
                     {products.data?.map((product) => (
-                        <li className="first:pt-0 last:pb-0 py-3">
+                        <li key={product.id} className="first:pt-0 last:pb-0 py-3">
                             <div>
                                 <p><span className="font-bold">Name: </span>{product.name}</p>
                                 <p><span className="font-bold">Author: </span>{product.author}</p>
