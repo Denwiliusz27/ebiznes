@@ -1,0 +1,25 @@
+#!/bin/bash
+
+cd "$(git rev-parse --show-toplevel)"
+
+STAGED_FILES=($(git diff --cached --name-only --diff-filter=ACM | grep '\.scala$'))
+
+echo "Linting ${#STAGED_FILES[@]} files"
+
+if [[ ${#STAGED_FILES[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+scalafmt --test "${STAGED_FILES[@]}"
+
+LINTER_EXIT="$?"
+
+if [[ ${LINTER_EXIT} -eq 0 ]]; then
+  git add "${STAGED_FILES[@]}"
+  printf "\n\033[42mCOMMIT SUCCEEDED\033[0m\n"
+else
+  printf "\n\033[41mCOMMIT FAILED:\033[0m Fix errors and try again\n"
+  exit 1
+fi
+
+exit ${LINTER_EXIT}
