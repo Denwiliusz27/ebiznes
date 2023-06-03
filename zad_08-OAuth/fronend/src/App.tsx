@@ -1,31 +1,28 @@
-import {Link, Route, Routes} from "react-router-dom";
+import {Route, Routes} from "react-router-dom";
 import Login from "./components/Login";
 import Register from "./components/Register";
+import AuthRoute from "./AuthRoute";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar";
 
 function App() {
-
-  return (
-    <>
-        <div className="App">
-            <div className="flex flex-row justify-center bg-amber-100 h-16">
-                <div className="hover:bg-amber-500 flex flex-row items-center">
-                    <Link to="/login" className="px-12">Login</Link>
-                </div>
-                <div className="hover:bg-amber-500 flex flex-row items-center">
-                    <Link to="/register" className="px-12">Register</Link>
-                </div>
+    return (
+        <>
+            <div className="App">
+                <Routes>
+                    <Route path="/" element={<Navbar/>}>
+                        <Route path="login" element={<Login/>}></Route>
+                        <Route path="register" element={<Register/>}></Route>
+                        <Route path="/home" element={
+                            <AuthRoute>
+                                <Home/>
+                            </AuthRoute>
+                        }></Route>
+                    </Route>
+                </Routes>
             </div>
-            <Routes>
-                {/*<Route path="/" element={<Hello/>}></Route>*/}
-                <Route path="/login" element={<Login/>}></Route>
-                <Route path="/register" element={<Register/>}></Route>
-                <Route path="/home" element={
-
-                }></Route>
-            </Routes>
-        </div>
-    </>
-  )
+        </>
+    )
 }
 
 export default App

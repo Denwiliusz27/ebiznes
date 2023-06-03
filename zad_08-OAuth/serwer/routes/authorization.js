@@ -5,6 +5,8 @@ const authorizationController = require('../controllers/authorizationController'
 
 router.post('/login', authorizationController.loginUser);
 
+router.post('/logout', authorizationController.logoutUser);
+
 router.get('/register', function(req, res, next) {
     res.render('index', { title: 'Express' });
 });

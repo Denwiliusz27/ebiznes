@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {useMutation} from "react-query";
 import Api from "../Api";
 import {AxiosError} from "axios";
@@ -11,6 +11,15 @@ function Login() {
     const [password, setPassword] = useState("");
     const [error, setError] = useState("")
 
+    let token = localStorage.getItem('token')
+
+    useEffect(() => {
+        token = window.localStorage.getItem("token");
+        if (token) {
+            navigate("/home")
+        }
+    }, [token]);
+
     const {mutate} = useMutation(async () => {
             const response = await Api.post(`login`, {
                 email: email,
@@ -20,17 +29,15 @@ function Login() {
         },
         {
             onSuccess: (responseData) => {
-                console.log(responseData)
-
                 window.localStorage.setItem("token", responseData.token);
                 window.localStorage.setItem("user", responseData.user);
-                navigate("/hello");
-
+                window.localStorage.setItem("user_id", responseData.id);
+                navigate("/home");
             },
             onError: (error: AxiosError) => {
-                if (error.response.status == 404) {
+                if (error.response?.status == 404) {
                     setError("User doesn't exist")
-                } else if (error.response.status == 401){
+                } else if (error.response?.status == 401) {
                     setError("Incorrect password")
                 }
             }
@@ -50,7 +57,6 @@ function Login() {
         event.preventDefault();
         mutate();
     };
-
 
     return (
         <div className="flex flex-col items-center pt-20">
