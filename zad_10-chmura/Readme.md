@@ -1,1 +1,1 @@
-Strona dostępna pod linkiem: [pofrontend.azurewebsites.net]()
+Strona dostępna pod linkiem: [pofrontend.azurewebsites.net](https://pofrontend.azurewebsites.net/)
